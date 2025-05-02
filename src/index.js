@@ -1,9 +1,12 @@
+import {initialCards} from './scripts/cards.js';
+import './pages/index.css'
+
 const cardTemplate = document.querySelector('#card-template').content;
 const cardsContainer = document.querySelector('.places__list');
 
 const deleteCard = cardElement => cardElement.remove();
 
-const createCard = ({ name, link }, deleteHandler) => {
+const createCard = ( initialCards,  deleteHandler) => {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const [cardImage, cardTitle, deleteButton] = [
     '.card__image',
@@ -11,9 +14,9 @@ const createCard = ({ name, link }, deleteHandler) => {
     '.card__delete-button',
   ].map(selector => cardElement.querySelector(selector));
 
-  cardImage.src = link;
-  cardImage.alt = name;
-  cardTitle.textContent = name;
+  cardImage.src = initialCards.link;
+  cardImage.alt = initialCards.name;
+  cardTitle.textContent = initialCards.name;
   deleteButton.addEventListener('click', () => deleteHandler(cardElement));
 
   return cardElement;
