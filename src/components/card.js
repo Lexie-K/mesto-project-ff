@@ -1,3 +1,5 @@
+import { openModal } from './modal';
+
 const cardTemplate = document.querySelector('#card-template').content;
 
 const deleteCard = cardElement => cardElement.remove();
@@ -8,7 +10,18 @@ const toggleLikeButton = likeButton => {
   }
 };
 
-const createCard = ({ link, name }, deleteHandler, handleLike) => {
+const zoomPic = (link, name) => {
+  const cardImage = document.querySelector('.popup_type_image');
+  const zoomImg = document.querySelector('.popup__image');
+  const zoomImgDescription = document.querySelector('.popup__caption');
+  zoomImg.src = link;
+  zoomImg.alt = name;
+  zoomImgDescription.textContent = name;
+
+  openModal(cardImage);
+};
+
+const createCard = ({ link, name }, deleteHandler, handleLike, handleZoom) => {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const [cardImage, cardTitle, deleteButton, likeButton] = [
     '.card__image',
@@ -22,7 +35,9 @@ const createCard = ({ link, name }, deleteHandler, handleLike) => {
   cardTitle.textContent = name;
   deleteButton.addEventListener('click', () => deleteHandler(cardElement));
   likeButton.addEventListener('click', e => handleLike(e.target));
+  cardImage.addEventListener('click', () => handleZoom(link, name));
+
   return cardElement;
 };
 
-export { createCard, deleteCard, toggleLikeButton };
+export { createCard, deleteCard, toggleLikeButton, zoomPic };
