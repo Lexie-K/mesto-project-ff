@@ -1,5 +1,3 @@
-import { openModal } from './modal';
-
 const cardTemplate = document.querySelector('#card-template').content;
 
 const deleteCard = cardElement => cardElement.remove();
@@ -8,17 +6,6 @@ const toggleLikeButton = likeButton => {
   if (likeButton.classList.contains('card__like-button')) {
     likeButton.classList.toggle('card__like-button_is-active');
   }
-};
-
-const zoomPic = (link, name) => {
-  const cardImage = document.querySelector('.popup_type_image');
-  const zoomImg = document.querySelector('.popup__image');
-  const zoomImgDescription = document.querySelector('.popup__caption');
-  zoomImg.src = link;
-  zoomImg.alt = name;
-  zoomImgDescription.textContent = name;
-
-  openModal(cardImage);
 };
 
 const createCard = ({ link, name }, deleteHandler, handleLike, handleZoom) => {
@@ -40,4 +27,4 @@ const createCard = ({ link, name }, deleteHandler, handleLike, handleZoom) => {
   return cardElement;
 };
 
-export { createCard, deleteCard, toggleLikeButton, zoomPic };
+export { createCard, deleteCard, toggleLikeButton };
