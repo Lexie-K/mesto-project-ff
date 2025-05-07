@@ -12,15 +12,10 @@ const descriptionInput = document.querySelector(
   '.popup__input_type_description'
 );
 const profileForm = document.querySelector('.popup__form[name="edit-profile"]');
-const profileSaveButton = document.querySelector(
-  '.popup__form[name="edit-profile"] .popup__button'
-);
 const cardForm = document.querySelector('.popup__form[name="new-place"]');
-const cardSaveButton = document.querySelector(
-  '.popup__form[name="new-place"] .popup__button'
-);
 const addCard = document.querySelector('.profile__add-button');
 const newCard = document.querySelector('.popup_type_new-card');
+const profileCard = document.querySelector('.popup_type_edit');
 const cardNameInput = document.querySelector('.popup__input_type_card-name');
 const cardUrlInput = document.querySelector('.popup__input_type_url');
 const cardImage = document.querySelector('.popup_type_image');
@@ -60,10 +55,6 @@ editProfileButton.addEventListener('click', () => {
   openModal(popup);
 });
 
-profileSaveButton.addEventListener('click', () => {
-  closeModal(popup);
-});
-
 popups.forEach(popup => {
   popup.addEventListener('mousedown', e => {
     if (e.target.classList.contains('popup_is-opened')) {
@@ -78,22 +69,19 @@ popups.forEach(popup => {
   });
 });
 
-const handleFormSubmit = e => {
+const handleProfileFormSubmit = e => {
   e.preventDefault();
   const newName = nameInput.value;
   const newOccupation = descriptionInput.value;
 
   profileTitle.textContent = newName;
   profileDescription.textContent = newOccupation;
+  closeModal(profileCard);
 };
 
-profileForm.addEventListener('submit', handleFormSubmit);
+profileForm.addEventListener('submit', handleProfileFormSubmit);
 
 addCard.addEventListener('click', () => openModal(newCard));
-
-cardSaveButton.addEventListener('click', () => {
-  closeModal(newCard);
-});
 
 const handleFormSubmitCard = e => {
   e.preventDefault();
@@ -112,6 +100,7 @@ const handleFormSubmitCard = e => {
 
   e.target.reset();
   cardsContainer.prepend(newCardElement);
+  closeModal(newCard);
 };
 
 cardForm.addEventListener('submit', handleFormSubmitCard);
