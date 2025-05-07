@@ -3,7 +3,6 @@ import { initialCards } from './scripts/cards.js';
 import { createCard, deleteCard, toggleLikeButton } from './components/card.js';
 import { openModal, closeModal } from './components/modal.js';
 
-
 const popups = document.querySelectorAll('.popup');
 const cardsContainer = document.querySelector('.places__list');
 const editProfileButton = document.querySelector('.profile__edit-button');
