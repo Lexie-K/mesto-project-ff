@@ -3,7 +3,7 @@ import { initialCards } from './scripts/cards.js';
 import { createCard, deleteCard, toggleLikeButton } from './components/card.js';
 import { openModal, closeModal } from './components/modal.js';
 
-const popup = document.querySelector('.popup');
+
 const popups = document.querySelectorAll('.popup');
 const cardsContainer = document.querySelector('.places__list');
 const editProfileButton = document.querySelector('.profile__edit-button');
@@ -52,7 +52,7 @@ editProfileButton.addEventListener('click', () => {
 
   nameInput.value = profileName;
   descriptionInput.value = profileOccupation;
-  openModal(popup);
+  openModal(profileCard);
 });
 
 popups.forEach(popup => {
