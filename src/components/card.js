@@ -10,21 +10,13 @@ const deleteCard = (cardElement, _id) => {
 
 const toggleLikeButton = (likeButton, _id, likeScore) => {
   const isLiked = likeButton.classList.contains('card__like-button_is-active');
-  if (isLiked) {
-    removeLikefromCard(_id)
-      .then(card => {
-        likeButton.classList.remove('card__like-button_is-active');
-        likeScore.textContent = card.likes ? card.likes.length : '0';
-      })
-      .catch(error => console.error('Error message:', error));
-  } else {
-    addLiketoCard(_id)
-      .then(card => {
-        likeButton.classList.add('card__like-button_is-active');
-        likeScore.textContent = card.likes ? card.likes.length : '0';
-      })
-      .catch(error => console.error(`Error message:`, error));
-  }
+  const likeMethod = isLiked ? removeLikefromCard : addLiketoCard;
+  likeMethod(_id)
+    .then(card => {
+      likeButton.classList.toggle('card__like-button_is-active');
+      likeScore.textContent = card.likes ? card.likes.length : '0';
+    })
+    .catch(error => console.error('Error message:', error));
 };
 
 const createCard = (
@@ -43,7 +35,7 @@ const createCard = (
     '.card__like-score',
   ].map(selector => cardElement.querySelector(selector));
 
-  if ('026f1b3109ee695637ccd58e' === owner._id) {
+  if (currentUserId === owner._id) {
     deleteButton.addEventListener('click', () =>
       deleteHandler(cardElement, _id)
     );

@@ -37,9 +37,9 @@ const avatarEditIconButton = document.querySelector(
   '.profile__image-edit-icon'
 );
 
-let currentUserId = null;
+let currentUserId = '';
 
-const userInfo = ({ avatar, name, about, _id }) => {
+const fillUserInfo = ({ avatar, name, about, _id }) => {
   profileTitle.textContent = name;
   profileDescription.textContent = about;
   profileAvatar.style.backgroundImage = `url(${avatar})`;
@@ -57,7 +57,7 @@ const renderCards = cards => {
 document.addEventListener('DOMContentLoaded', () => {
   Promise.all([getUserInfo(), getInitialCards()])
     .then(([user, cards]) => {
-      userInfo(user);
+      fillUserInfo(user);
       renderCards(cards);
     })
     .catch(error => {
@@ -94,13 +94,11 @@ avatarEditIconButton.addEventListener('click', () => {
 
 popups.forEach(popup => {
   popup.addEventListener('mousedown', e => {
-    if (e.target.classList.contains('popup_is-opened')) {
-      closeModal(popup);
-    }
-    if (e.target.classList.contains('popup__close')) {
-      closeModal(popup);
-    }
-    if (e.target === popup && !e.target.closest('popup_is-opened')) {
+    if (
+      e.target.classList.contains('popup_is-opened') ||
+      e.target.classList.contains('popup__close') ||
+      (e.target === popup && !e.target.closest('.popup_is-opened'))
+    ) {
       closeModal(popup);
     }
   });
@@ -114,12 +112,14 @@ const handleProfileFormSubmit = e => {
   const newOccupation = descriptionInput.value;
 
   renderLoading(true, submitButton);
+
   changeUserInfo(newName, newOccupation)
-    .then(() => {
-      profileTitle.textContent = newName;
-      profileDescription.textContent = newOccupation;
+    .then(data => {
+      profileTitle.textContent = data.name;
+      profileDescription.textContent = data.about;
+
       e.target.reset();
-      closeModal(newAvatar);
+      closeModal(profileCard);
     })
     .catch(error => {
       console.error('Error message:', error);
@@ -127,8 +127,6 @@ const handleProfileFormSubmit = e => {
     .finally(() => {
       renderLoading(false, submitButton);
     });
-
-  closeModal(profileCard);
 };
 
 profileForm.addEventListener('submit', handleProfileFormSubmit);
@@ -151,14 +149,15 @@ const handleFormSubmitCard = e => {
   addNewCard(newCardData)
     .then(serverData => {
       if (!serverData || !serverData._id) {
-        throw new Error('Invalid user!');
+        throw new Error('Invalid new card!');
       }
 
       const newCardElement = createCard(
         serverData,
         deleteCard,
         toggleLikeButton,
-        zoomPic
+        zoomPic,
+        currentUserId
       );
 
       cardsContainer.prepend(newCardElement);
@@ -181,7 +180,7 @@ const handleAvatarFormSubmit = e => {
   const avatar = avatarUrlInput.value;
   updateUserAvatar(avatar)
     .then(updatedUser => {
-      userInfo(updatedUser);
+      fillUserInfo(updatedUser);
       e.target.reset();
       closeModal(newAvatar);
     })
@@ -195,11 +194,7 @@ const handleAvatarFormSubmit = e => {
 avatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
 const renderLoading = (isLoading, submitButton) => {
-  if (isLoading) {
-    submitButton.textContent = 'Сохранение...';
-  } else {
-    submitButton.textContent = 'Сохранить';
-  }
+  submitButton.textContent = isLoading ? 'Сохранение...' : 'Сохранить';
 };
 
 const validationConfig = {

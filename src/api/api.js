@@ -6,24 +6,25 @@ const config = {
   },
 };
 
+const handleResponse = res => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Error message: ${res.status}`);
+};
+
 export const getInitialCards = async () => {
   const res = await fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   });
-  if (res.ok) {
-    return res.json();
-  }
-  return await Promise.reject(`Error message: ${res.status}`);
+  return handleResponse(res);
 };
 
 export const getUserInfo = async () => {
   const res = await fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   });
-  if (res.ok) {
-    return res.json();
-  }
-  return await Promise.reject(`Error message: ${res.status}`);
+  return handleResponse(res);
 };
 
 export const changeUserInfo = (newName, newOccupation) => {
@@ -34,7 +35,7 @@ export const changeUserInfo = (newName, newOccupation) => {
       name: newName,
       about: newOccupation,
     }),
-  });
+  }).then(handleResponse);
 };
 
 export const addNewCard = newCardData => {
@@ -42,43 +43,28 @@ export const addNewCard = newCardData => {
     method: 'POST',
     headers: config.headers,
     body: JSON.stringify(newCardData),
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Error message: ${res.status}`);
-  });
+  }).then(handleResponse);
 };
 
 export const removeCard = _id => {
   return fetch(`${config.baseUrl}/cards/${_id}`, {
     method: 'DELETE',
     headers: config.headers,
-  });
+  }).then(handleResponse);
 };
 
 export const addLiketoCard = _id => {
   return fetch(`${config.baseUrl}/cards/likes/${_id} `, {
     method: 'PUT',
     headers: config.headers,
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Error message: ${res.status}`);
-  });
+  }).then(handleResponse);
 };
 
 export const removeLikefromCard = _id => {
   return fetch(`${config.baseUrl}/cards/likes/${_id} `, {
     method: 'DELETE',
     headers: config.headers,
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Error message: ${res.status}`);
-  });
+  }).then(handleResponse);
 };
 
 export const updateUserAvatar = avatar => {
@@ -86,10 +72,5 @@ export const updateUserAvatar = avatar => {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({ avatar: avatar }),
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Error message: ${res.status}`);
-  });
+  }).then(handleResponse);
 };
