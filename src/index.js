@@ -37,7 +37,7 @@ const avatarEditIconButton = document.querySelector(
   '.profile__image-edit-icon'
 );
 
-let currentUserId = '';
+let currentUserId = null;
 
 const fillUserInfo = ({ avatar, name, about, _id }) => {
   profileTitle.textContent = name;
